@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import BookingService from "../services/BookingService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FormContainer = styled.form`
   display: flex;
@@ -29,44 +31,60 @@ const Button = styled.button`
 
 const BookingForm = ({ selectedSeats }) => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState(""); // Додано поле для телефону
-  const [email, setEmail] = useState(""); // Додано поле для email
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedSeats.length === 0 || name.trim() === "" || phone.trim() === "" || email.trim() === "") {
-      alert("Введіть всі дані та виберіть місця!");
+
+    if (!name.trim() || !phone.trim() || !email.trim() || selectedSeats.length === 0) {
+      toast.error("Будь ласка, заповніть усі поля та виберіть місця.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Некоректний email.");
       return;
     }
 
     try {
-      const response = await BookingService.bookSeats(selectedSeats, { name, phone, email });
-      alert("Бронювання успішне!");
-    } catch (err) {
-      alert("Помилка при бронюванні!");
+      await BookingService.bookSeats(selectedSeats, { name, phone, email });
+      toast.success("Бронювання успішне!");
+
+      // Очистити поля
+      setName("");
+      setPhone("");
+      setEmail("");
+    } catch {
+      toast.error("Сталася помилка при бронюванні.");
     }
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <FormContainer onSubmit={handleSubmit} autoComplete="off">
       <h3>Бронювання</h3>
       <Input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Ваше ім’я"
+        required
       />
       <Input
         type="text"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         placeholder="Ваш телефон"
+        required
       />
       <Input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Ваш email"
+        required
       />
       <Button type="submit">Забронювати</Button>
     </FormContainer>

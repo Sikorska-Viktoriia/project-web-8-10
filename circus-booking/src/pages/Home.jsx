@@ -1,101 +1,19 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import shows from '../data/shows';
-
-const PageContainer = styled.div`
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 50px;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 20px;
-`;
-
-const HistorySection = styled.div`
-  text-align: center;
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-`;
-
-const SearchBar = styled.input`
-  padding: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 400px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
-const FilterSection = styled.div`
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  justify-content: center;
-`;
-
-const FilterSelect = styled.select`
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-`;
-
-const ShowGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-`;
-
-const ShowCard = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
-const ShowImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-`;
-
-const ShowTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-top: 10px;
-`;
-
-const ShowDescription = styled.p`
-  font-size: 1rem;
-  margin-top: 10px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+import './Home.css';
 
 const Home = () => {
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('');
   const [filterDate, setFilterDate] = useState(null);
+  const [filterLocation, setFilterLocation] = useState('');
   const navigate = useNavigate();
+
+  const uniqueTypes = [...new Set(shows.map(show => show.type))];
+  const uniqueLocations = [...new Set(shows.map(show => show.city))];
 
   const filteredShows = shows.filter((show) => {
     const matchesSearch = show.title.toLowerCase().includes(search.toLowerCase());
@@ -103,7 +21,10 @@ const Home = () => {
     const matchesDate = filterDate
       ? new Date(show.date).toLocaleDateString() === filterDate.toLocaleDateString()
       : true;
-    return matchesSearch && matchesType && matchesDate;
+    const matchesLocation = filterLocation
+      ? show.city === filterLocation
+      : true;
+    return matchesSearch && matchesType && matchesDate && matchesLocation;
   });
 
   const handleBookShow = (show) => {
@@ -111,49 +32,62 @@ const Home = () => {
   };
 
   return (
-    <PageContainer>
-      <Title>Цирк "Захоплення"</Title>
-      <HistorySection>
+    <div className="page-container">
+      <h1 className="title">Цирк "Захоплення"</h1>
+      <div className="history-section">
         <p>Цирк "Захоплення" є одним з найстаріших цирків у світі, що має багатовікову історію та безліч захоплюючих подій!</p>
-      </HistorySection>
+      </div>
 
-      <SearchBar
+      <input
+        className="search-bar"
         type="text"
         placeholder="Пошук за назвою події..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <FilterSection>
-        <FilterSelect value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+      <div className="filter-section">
+        <select className="filter-select" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="">Виберіть жанр</option>
-          <option value="Клоуни">Клоуни</option>
-          <option value="Акробати">Акробати</option>
-          <option value="Жонглери">Жонглери</option>
-          <option value="Магія">Магія</option>
-        </FilterSelect>
+          {uniqueTypes.map((type) => (
+            <option key={type} value={type}>{type}</option>
+          ))}
+        </select>
+
+        <select
+          className="location-select"
+          value={filterLocation}
+          onChange={(e) => setFilterLocation(e.target.value)}
+        >
+          <option value="">Виберіть локацію</option>
+          {uniqueLocations.map((location) => (
+            <option key={location} value={location}>{location}</option>
+          ))}
+        </select>
 
         <DatePicker
           selected={filterDate}
           onChange={(date) => setFilterDate(date)}
           dateFormat="dd/MM/yyyy"
           placeholderText="Виберіть дату"
+          highlightDates={shows.map(show => new Date(show.date))}
+          className="date-picker"
         />
-      </FilterSection>
+      </div>
 
-      <ShowGrid>
+      <div className="show-grid">
         {filteredShows.map((show) => (
-          <ShowCard key={show.id}>
-            <ShowImage src={show.image} alt={show.title} />
-            <ShowTitle>{show.title}</ShowTitle>
-            <ShowDescription>{show.description}</ShowDescription>
+          <div key={show.id} className="show-card">
+            <img className="show-image" src={show.image} alt={show.title} />
+            <h2 className="show-title">{show.title}</h2>
+            <p className="show-description">{show.description}</p>
             <p><strong>Дата:</strong> {show.date}</p>
             <p><strong>Час:</strong> {show.time}</p>
-            <Button onClick={() => handleBookShow(show)}>Забронювати</Button>
-          </ShowCard>
+            <button className="book-button" onClick={() => handleBookShow(show)}>Забронювати</button>
+          </div>
         ))}
-      </ShowGrid>
-    </PageContainer>
+      </div>
+    </div>
   );
 };
 
