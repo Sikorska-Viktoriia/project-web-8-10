@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import jsPDF from 'jspdf';
+// import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-// import { generatePDF } from './pdfGenerator'; // шлях до модуля
+import { generatePDF } from './pdfGenerator'; // шлях до модуля
 
 
 const ROWS = 6;
@@ -66,30 +66,30 @@ const CircusHall = ({ showId }) => {
     setSelectedSeats([]);
   };
 
-  const generatePDF = (seats) => {
-    if (!Array.isArray(seats) || seats.length === 0) {
-      alert("Немає вибраних місць для створення квитка");
-      return;
-    }
+  // const generatePDF = (seats) => {
+  //   if (!Array.isArray(seats) || seats.length === 0) {
+  //     alert("Немає вибраних місць для створення квитка");
+  //     return;
+  //   }
   
-    const doc = new jsPDF();
+  //   const doc = new jsPDF();
   
-    doc.setFont('helvetica', 'normal'); // ⚠️ Не підтримує українські символи повністю
-    doc.setFontSize(16);
-    doc.text('Kвиток на циркову виставу', 20, 20);
+  //   doc.setFont('helvetica', 'normal'); // ⚠️ Не підтримує українські символи повністю
+  //   doc.setFontSize(16);
+  //   doc.text('Kвиток на циркову виставу', 20, 20);
   
-    doc.setFontSize(12);
-    doc.text(`Iм'я: ${userName}`, 20, 30);
-    doc.text(`Телефон: ${userPhone}`, 20, 40);
-    doc.text(`Email: ${userEmail}`, 20, 50);
+  //   doc.setFontSize(12);
+  //   doc.text(`Iм'я: ${userName}`, 20, 30);
+  //   doc.text(`Телефон: ${userPhone}`, 20, 40);
+  //   doc.text(`Email: ${userEmail}`, 20, 50);
   
-    const seatList = seats.join(', ');
-    const totalAmount = seats.reduce((sum, id) => sum + seatPrice(id), 0);
-    doc.text(`Місця: ${seatList}`, 20, 60);
-    doc.text(`Сума до сплати: ${totalAmount} грн`, 20, 70);
+  //   const seatList = seats.join(', ');
+  //   const totalAmount = seats.reduce((sum, id) => sum + seatPrice(id), 0);
+  //   doc.text(`Місця: ${seatList}`, 20, 60);
+  //   doc.text(`Сума до сплати: ${totalAmount} грн`, 20, 70);
   
-    doc.save('ticket.pdf');
-  };
+  //   doc.save('ticket.pdf');
+  // };
   
 
   useEffect(() => {
