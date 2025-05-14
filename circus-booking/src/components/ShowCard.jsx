@@ -32,17 +32,19 @@ const Description = styled.p`
   margin: 10px 0;
 `;
 
+
 const ShowCard = ({ show }) => {
   const navigate = useNavigate();
 
   return (
     <Card onClick={() => navigate(`/booking/${show.id}`)}>
-      <Image src ={show.imageUrl} alt={show.title} />
-<Title>{show.title}</Title>
-<Description>{show.description}</Description>
-<p>{show.date} {show.time}</p>
-</Card>
-);
+      <Image src={show.imageUrl} alt={show.title} />
+      <Title>{show.title}</Title>
+      <Description>{show.description}</Description>
+      <p>{show.date} {show.time}</p>
+    </Card>
+  );
 };
+
 
 export default ShowCard;
