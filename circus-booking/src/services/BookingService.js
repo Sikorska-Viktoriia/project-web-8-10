@@ -1,54 +1,53 @@
 const BookingService = {
-    bookSeats: async(seats, name) => {
-        try {
-            const response = await fetch("/api/book", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ seats, name }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to book seats");
-            }
-
-            return response.json();
-        } catch (error) {
-            console.error("Error booking seats:", error);
-            throw error;
+    async bookSeats(seats, name, email, showId) {
+        const response = await fetch('/api/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seats, name, email, showId }),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to book seats');
         }
+        return response.json();
     },
 
-    purchaseTickets: async(seats, userData) => {
-        try {
-            const response = await fetch("/api/purchase", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ seats, userData }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to purchase tickets");
-            }
-
-            return response.json();
-        } catch (error) {
-            console.error("Error purchasing tickets:", error);
-            throw error;
+    async purchaseTickets(seats, userData, showId) {
+        const response = await fetch('/api/purchase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seats, userData, showId }),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to purchase tickets');
         }
+        return response.json();
     },
 
-    getBookedSeats: async() => {
-        try {
-            const response = await fetch("/api/booked");
-            if (!response.ok) throw new Error("Failed to fetch booked seats");
-            const data = await response.json();
-            return data.bookedSeats;
-        } catch (error) {
-            console.error("Error fetching booked seats:", error);
-            return [];
+    async getBookedSeats(showId) {
+        const response = await fetch(`/api/booked/${showId}`);
+        if (!response.ok) throw new Error('Failed to fetch booked seats');
+        return response.json();
+    },
+
+    async searchBookingsByEmail(email) {
+        const response = await fetch(`/api/bookings/search?email=${encodeURIComponent(email)}`);
+        if (!response.ok) throw new Error('Failed to search bookings');
+        return response.json();
+    },
+
+    async cancelBooking(showId, email, seats) {
+        const response = await fetch('/api/bookings/cancel', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ showId, email, seats }),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to cancel booking');
         }
+        return response.json();
     }
 };
 

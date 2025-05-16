@@ -5,61 +5,76 @@ import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
 import "react-toastify/dist/ReactToastify.css";
 
-// ===== Styled Components =====
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Input = styled.input`
   margin: 10px;
-  padding: 8px;
-  width: 200px;
+  padding: 10px;
+  width: 220px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 `;
 
 const Button = styled.button`
-  padding: 10px;
+  padding: 10px 20px;
   margin-top: 10px;
   background-color: #2196f3;
   color: white;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 16px;
 
   &:hover {
     background-color: #0b7dda;
   }
+
+  &:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
 `;
 
-// ===== Component =====
 const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  });
-
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
 
   const TICKET_PRICE = 150;
 
-  // Автоматичне оновлення списку зайнятих місць
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
         const res = await BookingService.getBookedSeats(showId);
-        setBookedSeats(res);
+        console.log("Отримані заброньовані місця:", res);
+
+        // Переконуємося, що bookedSeats - масив
+        const seatsArray = Array.isArray(res)
+          ? res
+          : Array.isArray(res.bookedSeats)
+          ? res.bookedSeats
+          : [];
+
+        setBookedSeats(seatsArray);
       } catch (err) {
         console.error("Не вдалося завантажити зайняті місця", err);
+        setBookedSeats([]);
       }
     };
 
-    fetchBookedSeats(); // одразу
-    const interval = setInterval(fetchBookedSeats, 5000); // кожні 5 сек
+    fetchBookedSeats();
 
-    return () => clearInterval(interval); // очистка таймера
+    const interval = setInterval(fetchBookedSeats, 5000);
+    return () => clearInterval(interval);
   }, [showId]);
 
   useEffect(() => {
@@ -71,8 +86,7 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const saveToLocalStorage = (data, showId) => {
     const existing = JSON.parse(localStorage.getItem(`bookings_${showId}`) || "[]");
@@ -91,6 +105,9 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
   };
 
   const checkForBookedSeats = (selectedSeats) => {
+    // Переконуємося, що bookedSeats - масив і використовуємо includes
+    if (!Array.isArray(bookedSeats)) return false;
+
     const conflict = selectedSeats.filter((seat) => bookedSeats.includes(seat));
     if (conflict.length > 0) {
       toast.error(`Місця вже зайняті: ${conflict.join(", ")}. Оберіть інші.`);
@@ -124,7 +141,8 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
         date: new Date().toISOString(),
       };
 
-      await BookingService.bookSeats(selectedSeats, formData.name, showId);
+      // Передаємо email в BookingService.bookSeats
+      await BookingService.bookSeats(selectedSeats, name, email, showId);
 
       if (isPurchasing) {
         await BookingService.purchaseTickets(selectedSeats, userData, showId);
@@ -137,7 +155,6 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
       saveToLocalStorage(userData, showId);
       setFormData({ name: "", phone: "", email: "" });
       setSelectedSeats([]);
-
     } catch (error) {
       console.error("Помилка при бронюванні:", error);
       toast.error(`Помилка: ${error.message}`);

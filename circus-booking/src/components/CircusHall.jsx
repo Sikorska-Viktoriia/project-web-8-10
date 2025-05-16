@@ -1,54 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import BookingForm from './BookingForm'; // Компонент форми для бронювання
-import BookingService from '../services/BookingService'; // Сервіс для взаємодії з сервером
+import BookingService from '../services/BookingService';
 
 const ROWS = 6;
 const COLS = 12;
 const VIP_ROWS = 2;
-const TICKET_PRICE = 150;
 
-const Seat = styled.circle`
-  transition: transform 0.3s, fill 0.3s;
-  cursor: pointer;
+const Container = styled.div`
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
 `;
 
-const CircusHall = ({ showId }) => {
-  const [selectedSeats, setSelectedSeats] = useState([]);
+const CircusHall = ({ showId, selectedSeats, setSelectedSeats }) => {
   const [bookedSeats, setBookedSeats] = useState([]);
 
-  // Завантажуємо місця для конкретного showId
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
-        const res = await BookingService.getBookedSeats(showId); // Отримуємо з сервера
-        setBookedSeats(res);
+        const res = await BookingService.getBookedSeats(showId);
+        // Встановлюємо масив заброньованих місць
+        setBookedSeats(res.bookedSeats || []);
       } catch (err) {
         console.error("Не вдалося завантажити зайняті місця", err);
       }
     };
 
-    fetchBookedSeats(); // Оновити при завантаженні
+    fetchBookedSeats();
+    const interval = setInterval(fetchBookedSeats, 5000);
 
-    const interval = setInterval(fetchBookedSeats, 5000); // Оновлюємо кожні 5 секунд
-    return () => clearInterval(interval); // Очищаємо інтервал при виході
+    return () => clearInterval(interval);
   }, [showId]);
 
   const toggleSeat = (seatId) => {
-    if (bookedSeats.includes(seatId)) return; // Не можна вибирати вже заброньовані місця
+    // Якщо місце вже заброньоване — не дозволяємо вибрати
+    if (bookedSeats.includes(seatId)) return;
+
     setSelectedSeats((prev) =>
       prev.includes(seatId) ? prev.filter((id) => id !== seatId) : [...prev, seatId]
     );
   };
 
-  const seatCount = selectedSeats.length;
-  const totalPrice = seatCount * TICKET_PRICE;
+  const Seat = ({ cx, cy, r, fill, stroke, strokeWidth, onClick }) => (
+    <circle
+      cx={cx}
+      cy={cy}
+      r={r}
+      fill={fill}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      style={{ transition: 'transform 0.3s, fill 0.3s', cursor: 'pointer' }}
+      onClick={onClick}
+    />
+  );
 
   return (
-    <div style={styles.container}>
+    <Container>
       <h2>Циркова Арена — Показ: {showId}</h2>
 
-      <svg viewBox="0 0 500 400" width="80%" height="80%" style={styles.svg}>
+      <svg viewBox="0 0 500 400" width="80%" height="80%" style={{ margin: '20px 0' }}>
         <rect x="200" y="30" width="100" height="30" fill="#d9534f" stroke="#fff" strokeWidth="2" />
         <text x="225" y="50" fill="#fff" fontSize="14" fontWeight="bold">Сцена</text>
 
@@ -66,46 +76,30 @@ const CircusHall = ({ showId }) => {
               let fill = '#fff';
               let stroke = '#ccc';
 
-              if (isBooked) fill = '#aaa'; // Зайняте місце
+              if (isBooked) fill = '#aaa';
               else if (isSelected) {
-                fill = '#5bc0de'; // Обране місце
+                fill = '#5bc0de';
                 stroke = '#f0ad4e';
-              } else if (isVIP) fill = '#f0ad4e'; // VIP місце
+              } else if (isVIP) fill = '#f0ad4e';
 
               return (
                 <Seat
                   key={seatId}
                   cx={x}
                   cy={y}
-                  r="12"
+                  r={12}
                   fill={fill}
                   stroke={stroke}
-                  strokeWidth="2"
-                  onClick={() => toggleSeat(seatId)} // Перемикає вибір
+                  strokeWidth={2}
+                  onClick={() => toggleSeat(seatId)}
                 />
               );
             })}
           </g>
         ))}
       </svg>
-
-      <p>Вибрано місць: {seatCount}</p>
-      <p>Сума до оплати: {totalPrice} грн</p>
-
-      <BookingForm selectedSeats={selectedSeats} showId={showId} />
-    </div>
+    </Container>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  svg: {
-    margin: '20px 0',
-  },
 };
 
 export default CircusHall;

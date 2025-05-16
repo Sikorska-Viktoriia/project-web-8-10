@@ -1,9 +1,9 @@
-// import React, { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import shows from "../data/shows";
 import CircusHall from "../components/CircusHall";
-import BookingForm from "../components/BookingForm"; // Компонент форми для бронювання
+import BookingForm from "../components/BookingForm";
 
 const BookingContainer = styled.div`
   padding: 40px;
@@ -24,6 +24,8 @@ const Booking = () => {
   const { showId } = useParams();
   const show = shows.find((s) => s.id.toString() === showId);
 
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
   if (!show) {
     return <BookingContainer>Шоу не знайдено.</BookingContainer>;
   }
@@ -39,13 +41,20 @@ const Booking = () => {
       </ShowInfo>
 
       <h2>Вибір місць:</h2>
-      <CircusHall showId={show.id} />
+      <CircusHall
+        showId={show.id}
+        selectedSeats={selectedSeats}
+        setSelectedSeats={setSelectedSeats}
+      />
 
       <h2>Введіть дані для бронювання:</h2>
-      <BookingForm selectedSeats={[]} />
+      <BookingForm
+        selectedSeats={selectedSeats}
+        setSelectedSeats={setSelectedSeats}
+        showId={show.id}
+      />
     </BookingContainer>
   );
 };
-
 
 export default Booking;
