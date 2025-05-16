@@ -1,0 +1,58 @@
+{
+  "1": [
+    61,
+    {
+      "seats": [
+        72
+      ],
+      "user": {
+        "name": "Вікторія Сікорська"
+      },
+      "timestamp": "2025-05-15T16:03:35.700Z"
+    },
+    {
+      "seats": [
+        70
+      ],
+      "user": {
+        "name": "Вікторія Сікорська",
+        "email": "sikorska.viktoriia@gmail.com"
+      },
+      "timestamp": "2025-05-16T15:36:46.264Z"
+    },
+    {
+      "seats": [
+        71
+      ],
+      "user": {
+        "name": "Вікторія Сікорська",
+        "email": "sikorska.viktoriia@gmail.com"
+      },
+      "timestamp": "2025-05-16T15:37:08.717Z"
+    }
+  ],
+  "10": [
+    {
+      "seats": [
+        1
+      ],
+      "user": {
+        "name": "Вікторія Сікорська",
+        "email": "sikorska.viktoriia@gmail.com"
+      },
+      "timestamp": "2025-05-16T15:37:42.568Z"
+    }
+  ],
+  "18": [
+    {
+      "seats": [
+        31,
+        32
+      ],
+      "user": {
+        "name": "Вікторія Казюлька"
+      },
+      "timestamp": "2025-05-15T16:04:58.997Z"
+    }
+  ]
+}
