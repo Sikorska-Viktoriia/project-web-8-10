@@ -3,7 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import shows from '../data/shows';
-import './Home.css';
+
+import {
+  PageContainer,
+  Title,
+  HistorySection,
+  SearchBar,
+  FilterSection,
+  FilterSelect,
+  DatePickerWrapper,
+  ShowGrid,
+  ShowCard,
+  ShowImage,
+  ShowTitle,
+  ShowDescription,
+  ShowInfo,
+  BookButton
+} from './Home.styles';
 
 const Home = () => {
   const [search, setSearch] = useState('');
@@ -19,7 +35,7 @@ const Home = () => {
     const matchesSearch = show.title.toLowerCase().includes(search.toLowerCase());
     const matchesType = filterType ? show.type === filterType : true;
     const matchesDate = filterDate
-      ? new Date(show.date).toLocaleDateString() === filterDate.toLocaleDateString()
+      ? new Date(show.date).toDateString() === filterDate.toDateString()
       : true;
     const matchesLocation = filterLocation
       ? show.city === filterLocation
@@ -32,62 +48,60 @@ const Home = () => {
   };
 
   return (
-    <div className="page-container">
-      <h1 className="title">Цирк "Захоплення"</h1>
-      <div className="history-section">
+    <PageContainer>
+      <Title>Цирк "Захоплення"</Title>
+      <HistorySection>
         <p>Цирк "Захоплення" є одним з найстаріших цирків у світі, що має багатовікову історію та безліч захоплюючих подій!</p>
-      </div>
+      </HistorySection>
 
-      <input
-        className="search-bar"
+      <SearchBar
         type="text"
         placeholder="Пошук за назвою події..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <div className="filter-section">
-        <select className="filter-select" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+      <FilterSection>
+        <FilterSelect value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="">Виберіть жанр</option>
-          {uniqueTypes.map((type) => (
+          {uniqueTypes.map(type => (
             <option key={type} value={type}>{type}</option>
           ))}
-        </select>
+        </FilterSelect>
 
-        <select
-          className="location-select"
-          value={filterLocation}
-          onChange={(e) => setFilterLocation(e.target.value)}
-        >
+        <FilterSelect value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)}>
           <option value="">Виберіть локацію</option>
-          {uniqueLocations.map((location) => (
+          {uniqueLocations.map(location => (
             <option key={location} value={location}>{location}</option>
           ))}
-        </select>
+        </FilterSelect>
 
-        <DatePicker
-          selected={filterDate}
-          onChange={(date) => setFilterDate(date)}
-          dateFormat="dd/MM/yyyy"
-          placeholderText="Виберіть дату"
-          highlightDates={shows.map(show => new Date(show.date))}
-          className="date-picker"
-        />
-      </div>
+        <DatePickerWrapper>
+          <DatePicker
+            selected={filterDate}
+            onChange={setFilterDate}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Виберіть дату"
+            highlightDates={shows.map(show => new Date(show.date))}
+            className="date-picker-input"
+            isClearable
+          />
+        </DatePickerWrapper>
+      </FilterSection>
 
-      <div className="show-grid">
-        {filteredShows.map((show) => (
-          <div key={show.id} className="show-card">
-            <img className="show-image" src={show.image} alt={show.title} />
-            <h2 className="show-title">{show.title}</h2>
-            <p className="show-description">{show.description}</p>
-            <p><strong>Дата:</strong> {show.date}</p>
-            <p><strong>Час:</strong> {show.time}</p>
-            <button className="book-button" onClick={() => handleBookShow(show)}>Забронювати</button>
-          </div>
+      <ShowGrid>
+        {filteredShows.map(show => (
+          <ShowCard key={show.id}>
+            <ShowImage src={show.image} alt={show.title} />
+            <ShowTitle>{show.title}</ShowTitle>
+            <ShowDescription>{show.description}</ShowDescription>
+            <ShowInfo><strong>Дата:</strong> {show.date}</ShowInfo>
+            <ShowInfo><strong>Час:</strong> {show.time}</ShowInfo>
+            <BookButton onClick={() => handleBookShow(show)}>Забронювати</BookButton>
+          </ShowCard>
         ))}
-      </div>
-    </div>
+      </ShowGrid>
+    </PageContainer>
   );
 };
 

@@ -1,63 +1,29 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import {
+  FormContainer,
+  Title,
+  Input,
+  Button,
+  InfoText,
+} from "./BookingForm.styles";
 import BookingService from "../services/BookingService";
 import { toast } from "react-toastify";
-import { jsPDF } from "jspdf";
 import "react-toastify/dist/ReactToastify.css";
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const Input = styled.input`
-  margin: 10px;
-  padding: 10px;
-  width: 220px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  margin-top: 10px;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #0b7dda;
-  }
-
-  &:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
-`;
 
 const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
-  const [isPurchasing, setIsPurchasing] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
 
-  const TICKET_PRICE = 150;
+  const VIP_PRICE = 300;
+  const REGULAR_PRICE = 150;
+
+  const getSeatPrice = (seatId) => (seatId <= 20 ? VIP_PRICE : REGULAR_PRICE);
 
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
         const res = await BookingService.getBookedSeats(showId);
-        console.log("Отримані заброньовані місця:", res);
-
-        // Переконуємося, що bookedSeats - масив
         const seatsArray = Array.isArray(res)
           ? res
           : Array.isArray(res.bookedSeats)
@@ -78,7 +44,8 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
   }, [showId]);
 
   useEffect(() => {
-    setTotalPrice(selectedSeats.length * TICKET_PRICE);
+    const sum = selectedSeats.reduce((acc, seatId) => acc + getSeatPrice(seatId), 0);
+    setTotalPrice(sum);
   }, [selectedSeats]);
 
   const handleInputChange = (e) => {
@@ -93,19 +60,9 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
     localStorage.setItem(`bookings_${showId}`, JSON.stringify([...existing, data]));
   };
 
-  const generatePDF = ({ name, phone, email, seats, totalPrice }) => {
-    const doc = new jsPDF();
-    doc.text("Дані бронювання", 10, 10);
-    doc.text(`Ім’я: ${name}`, 10, 20);
-    doc.text(`Телефон: ${phone}`, 10, 30);
-    doc.text(`Email: ${email}`, 10, 40);
-    doc.text(`Місця: ${seats.join(", ")}`, 10, 50);
-    doc.text(`Сума: ${totalPrice} грн`, 10, 60);
-    doc.save(`ticket_${name}_${Date.now()}.pdf`);
-  };
+
 
   const checkForBookedSeats = (selectedSeats) => {
-    // Переконуємося, що bookedSeats - масив і використовуємо includes
     if (!Array.isArray(bookedSeats)) return false;
 
     const conflict = selectedSeats.filter((seat) => bookedSeats.includes(seat));
@@ -137,21 +94,13 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
         ...formData,
         seats: selectedSeats,
         totalPrice,
-        isPurchasing,
         date: new Date().toISOString(),
       };
 
-      // Передаємо email в BookingService.bookSeats
       await BookingService.bookSeats(selectedSeats, name, email, showId);
 
-      if (isPurchasing) {
-        await BookingService.purchaseTickets(selectedSeats, userData, showId);
-        toast.success("Квитки куплені!");
-        generatePDF(userData);
-      } else {
-        toast.success("Місця заброньовано!");
-      }
-
+      toast.success("Місця заброньовано!");
+      
       saveToLocalStorage(userData, showId);
       setFormData({ name: "", phone: "", email: "" });
       setSelectedSeats([]);
@@ -163,7 +112,7 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
 
   return (
     <FormContainer onSubmit={handleSubmit} autoComplete="off">
-      <h3>Бронювання</h3>
+      <Title>Бронювання</Title>
 
       <Input
         type="text"
@@ -190,23 +139,10 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
         required
       />
 
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={isPurchasing}
-            onChange={() => setIsPurchasing((prev) => !prev)}
-          />
-          Купити квитки відразу
-        </label>
-      </div>
+      <InfoText>Кількість місць: {selectedSeats.length}</InfoText>
+      <InfoText>Сума: {totalPrice} грн</InfoText>
 
-      <p>Кількість місць: {selectedSeats.length}</p>
-      <p>Сума: {totalPrice} грн</p>
-
-      <Button type="submit">
-        {isPurchasing ? "Купити квитки" : "Забронювати"}
-      </Button>
+      <Button type="submit">Забронювати</Button>
     </FormContainer>
   );
 };
