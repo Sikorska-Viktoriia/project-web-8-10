@@ -10,7 +10,6 @@ import {
   PageContainer,
   Title,
   Logo,
-  ThemeToggle,
   HistorySection,
   SearchBar,
   FilterSection,
@@ -33,7 +32,6 @@ const Home = () => {
   const [filterDate, setFilterDate] = useState(null);
   const [filterLocation, setFilterLocation] = useState('');
   const [sortBy, setSortBy] = useState('');
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 8; // Динамічна кількість шоу на сторінці
@@ -41,22 +39,6 @@ const Home = () => {
 
   const uniqueTypes = useMemo(() => [...new Set(shows.map(show => show.type))], []);
   const uniqueLocations = useMemo(() => [...new Set(shows.map(show => show.city))], []);
-
-  // Завантаження теми з localStorage при завантаженні сторінки
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkTheme(true);
-      document.body.classList.add('dark-theme');
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = !isDarkTheme;
-    setIsDarkTheme(newTheme);
-    document.body.classList.toggle('dark-theme');
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-  };
 
   // Фільтрація шоу
   const filteredShows = useMemo(() => {
@@ -112,12 +94,9 @@ const Home = () => {
   };
 
   return (
-    <PageContainer className={isDarkTheme ? 'dark' : ''}>
+    <PageContainer>
       <Logo src={circusLogo} alt="Circus Logo" />
       <Title>Цирк "На дроті!"</Title>
-      <ThemeToggle onClick={toggleTheme}>
-        {isDarkTheme ? 'Світла тема' : 'Темна тема'}
-      </ThemeToggle>
 
       <HistorySection>
         <p>Цирк "Захоплення" є одним з найстаріших цирків у світі, що має багатовікову історію та безліч захоплюючих подій!</p>

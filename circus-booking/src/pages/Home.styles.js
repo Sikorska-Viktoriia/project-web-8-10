@@ -123,7 +123,9 @@ export const ShowGrid = styled.div `
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
+  align-items: stretch; /* щоб всі картки були однакової висоти */
 `;
+
 
 export const Logo = styled.img `
   width: 120px;
@@ -146,7 +148,6 @@ export const ThemeToggle = styled.button `
     color: #fff;
   }
 `;
-
 export const ShowCard = styled.div `
   background-color: #fff;
   border-radius: 15px;
@@ -156,6 +157,11 @@ export const ShowCard = styled.div `
   cursor: default;
   animation: ${fadeInUp} 0.8s ease forwards;
   transition: transform 0.3s, box-shadow 0.3s;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* щоб кнопка була внизу */
+  min-height: 450px; /* фіксована мінімальна висота картки */
 
   &:hover {
     transform: scale(1.07) translateY(-6px);
@@ -176,24 +182,26 @@ export const ShowImage = styled.img `
     filter: drop-shadow(0 6px 12px rgba(192, 57, 43, 0.5));
   }
 `;
-
 export const ShowTitle = styled.h2 `
   font-size: 1.6rem;
   color: #c0392b;
-  margin-bottom: 12px;
+  marginrgb(129, 34, 24) 12px;
 `;
-
 export const ShowDescription = styled.p `
   font-size: 1rem;
   color: #5d6d7e;
-  min-height: 60px;
+  min-height: 80px;
+  max-height: 80px;
   margin-bottom: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ShowInfo = styled.p `
   font-size: 0.95rem;
   color: #7b8a97;
   margin-bottom: 15px;
+  flex-grow: 1; /* займе доступний простір */
 `;
 
 export const BookButton = styled.button `
