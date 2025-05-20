@@ -1,4 +1,3 @@
-// shows.js
 const shows = [{
         id: '1',
         title: 'Клоуни та сміх',
@@ -7,7 +6,8 @@ const shows = [{
         image: '/images/clowns.jpg',
         date: '2025-05-15',
         time: '18:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 150
     },
     {
         id: '2',
@@ -17,7 +17,8 @@ const shows = [{
         image: '/images/acrobats.jpg',
         date: '2025-05-18',
         time: '19:00',
-        city: 'Київ'
+        city: 'Київ',
+        price: 200
     },
     {
         id: '3',
@@ -27,7 +28,8 @@ const shows = [{
         image: '/images/dance.jpg',
         date: '2025-05-20',
         time: '17:00',
-        city: 'Одеса'
+        city: 'Одеса',
+        price: 180
     },
     {
         id: '4',
@@ -37,7 +39,8 @@ const shows = [{
         image: '/images/magic.jpg',
         date: '2025-05-22',
         time: '20:00',
-        city: 'Харків'
+        city: 'Харків',
+        price: 170
     },
     {
         id: '5',
@@ -47,7 +50,8 @@ const shows = [{
         image: '/images/animals.jpg',
         date: '2025-05-25',
         time: '18:30',
-        city: 'Львів'
+        city: 'Львів',
+        price: 160
     },
     {
         id: '6',
@@ -57,7 +61,8 @@ const shows = [{
         image: '/images/aerial.jpg',
         date: '2025-05-28',
         time: '19:30',
-        city: 'Київ'
+        city: 'Київ',
+        price: 220
     },
     {
         id: '7',
@@ -67,7 +72,8 @@ const shows = [{
         image: '/images/night_magic.jpg',
         date: '2025-06-01',
         time: '21:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 175
     },
     {
         id: '8',
@@ -77,7 +83,8 @@ const shows = [{
         image: '/images/air_show.jpg',
         date: '2025-06-03',
         time: '20:00',
-        city: 'Київ'
+        city: 'Київ',
+        price: 210
     },
     {
         id: '9',
@@ -87,7 +94,8 @@ const shows = [{
         image: '/images/magic_tech.jpg',
         date: '2025-06-05',
         time: '19:00',
-        city: 'Одеса'
+        city: 'Одеса',
+        price: 180
     },
     {
         id: '10',
@@ -97,7 +105,8 @@ const shows = [{
         image: '/images/laugh.jpg',
         date: '2025-06-07',
         time: '18:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 140
     },
     {
         id: '11',
@@ -107,7 +116,8 @@ const shows = [{
         image: '/images/star_circus.jpg',
         date: '2025-06-10',
         time: '20:30',
-        city: 'Харків'
+        city: 'Харків',
+        price: 230
     },
     {
         id: '12',
@@ -117,7 +127,8 @@ const shows = [{
         image: '/images/color_magic.jpg',
         date: '2025-06-12',
         time: '19:30',
-        city: 'Київ'
+        city: 'Київ',
+        price: 175
     },
     {
         id: '13',
@@ -127,7 +138,8 @@ const shows = [{
         image: '/images/exciting_dance.jpg',
         date: '2025-06-14',
         time: '18:30',
-        city: 'Одеса'
+        city: 'Одеса',
+        price: 190
     },
     {
         id: '14',
@@ -137,7 +149,8 @@ const shows = [{
         image: '/images/symphony_air.jpg',
         date: '2025-06-17',
         time: '21:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 210
     },
     {
         id: '15',
@@ -147,7 +160,8 @@ const shows = [{
         image: '/images/illusion_time.jpg',
         date: '2025-06-20',
         time: '19:00',
-        city: 'Харків'
+        city: 'Харків',
+        price: 180
     },
     {
         id: '16',
@@ -157,7 +171,8 @@ const shows = [{
         image: '/images/magic_animals.jpg',
         date: '2025-06-23',
         time: '18:30',
-        city: 'Київ'
+        city: 'Київ',
+        price: 170
     },
     {
         id: '17',
@@ -167,7 +182,8 @@ const shows = [{
         image: '/images/ballet_wings.jpg',
         date: '2025-06-25',
         time: '20:00',
-        city: 'Одеса'
+        city: 'Одеса',
+        price: 220
     },
     {
         id: '18',
@@ -177,7 +193,8 @@ const shows = [{
         image: '/images/heavenly_artists.jpg',
         date: '2025-06-27',
         time: '19:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 205
     },
     {
         id: '19',
@@ -187,7 +204,8 @@ const shows = [{
         image: '/images/cosmic_illusions.jpg',
         date: '2025-06-30',
         time: '20:30',
-        city: 'Київ'
+        city: 'Київ',
+        price: 185
     },
     {
         id: '20',
@@ -197,7 +215,8 @@ const shows = [{
         image: '/images/ice_circus.jpg',
         date: '2025-07-02',
         time: '19:30',
-        city: 'Харків'
+        city: 'Харків',
+        price: 240
     },
     {
         id: '21',
@@ -207,7 +226,8 @@ const shows = [{
         image: '/images/magic_world.jpg',
         date: '2025-07-05',
         time: '20:00',
-        city: 'Одеса'
+        city: 'Одеса',
+        price: 190
     },
     {
         id: '22',
@@ -217,7 +237,8 @@ const shows = [{
         image: '/images/night_circus.jpg',
         date: '2025-07-07',
         time: '21:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 225
     },
     {
         id: '23',
@@ -227,7 +248,8 @@ const shows = [{
         image: '/images/gravity.jpg',
         date: '2025-07-10',
         time: '19:00',
-        city: 'Київ'
+        city: 'Київ',
+        price: 180
     },
     {
         id: '24',
@@ -237,7 +259,8 @@ const shows = [{
         image: '/images/dance_magic.jpg',
         date: '2025-07-12',
         time: '20:30',
-        city: 'Харків'
+        city: 'Харків',
+        price: 200
     },
     {
         id: '25',
@@ -247,7 +270,8 @@ const shows = [{
         image: '/images/sun_acrobats.jpg',
         date: '2025-07-14',
         time: '18:00',
-        city: 'Львів'
+        city: 'Львів',
+        price: 210
     },
     {
         id: '26',
@@ -256,49 +280,10 @@ const shows = [{
         type: 'Вогонь',
         image: '/images/fire_theatre.jpg',
         date: '2025-07-17',
-        time: '20:00',
-        city: 'Одеса'
+        time: '21:00',
+        city: 'Київ',
+        price: 230
     },
-    {
-        id: '27',
-        title: 'Вихор емоцій',
-        description: 'Силові номери, які піднімуть настрій',
-        type: 'Сила',
-        image: '/images/emotion_tornado.jpg',
-        date: '2025-07-20',
-        time: '21:30',
-        city: 'Київ'
-    },
-    {
-        id: '28',
-        title: 'Цирк на воді',
-        description: 'Акробати, що виконують трюки на воді',
-        type: 'Цирк',
-        image: '/images/water_circus.jpg',
-        date: '2025-07-23',
-        time: '18:30',
-        city: 'Харків'
-    },
-    {
-        id: '29',
-        title: 'Світло й тіні',
-        description: 'Фокуси, що створюють ілюзії з тінями',
-        type: 'Фокуси',
-        image: '/images/light_and_shadows.jpg',
-        date: '2025-07-25',
-        time: '19:00',
-        city: 'Одеса'
-    },
-    {
-        id: '30',
-        title: 'Ігри розуму',
-        description: 'Фокуси з розумовими маніпуляціями',
-        type: 'Магія',
-        image: '/images/mind_games.jpg',
-        date: '2025-07-28',
-        time: '20:30',
-        city: 'Львів'
-    }
-];
 
+];
 export default shows;

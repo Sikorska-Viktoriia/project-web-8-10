@@ -1,45 +1,37 @@
+// Improved Home.styles.js and Home.jsx
+
+// =================== Home.styles.js ===================
 import styled, { keyframes } from 'styled-components';
 
-// Glow animation for title
 const glow = keyframes `
-  0%, 100% {
-    text-shadow: 0 0 6px #c0392b, 0 0 12px #e74c3c;
-  }
-  50% {
-    text-shadow: 0 0 12px #c0392b, 0 0 18px #e74c3c;
-  }
+  0%, 100% { text-shadow: 0 0 6px #c0392b, 0 0 12px #e74c3c; }
+  50% { text-shadow: 0 0 12px #c0392b, 0 0 18px #e74c3c; }
 `;
 
-// Fade-in and up animation
 const fadeInUp = keyframes `
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
-// Pulse animation for button
 const pulse = keyframes `
-  0%, 100% {
-    box-shadow: 0 0 6px rgba(192, 57, 43, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 14px rgba(192, 57, 43, 0.9);
-  }
+  0%, 100% { box-shadow: 0 0 6px rgba(192, 57, 43, 0.6); }
+  50% { box-shadow: 0 0 14px rgba(192, 57, 43, 0.9); }
 `;
 
 export const PageContainer = styled.div `
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f6fb;
   color: #34495e;
+
+  &.dark {
+    background-color: #121212;
+    color: #eee;
+  }
 `;
+
 
 export const Title = styled.h1 `
   font-size: 3rem;
@@ -50,7 +42,7 @@ export const Title = styled.h1 `
   animation: ${glow} 3s ease-in-out infinite;
 `;
 
-export const HistorySection = styled.div `
+export const HistorySection = styled.section `
   background-color: #dbe9ff;
   padding: 20px;
   border-radius: 12px;
@@ -62,93 +54,108 @@ export const HistorySection = styled.div `
 
 export const SearchBar = styled.input `
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px;
   font-size: 1rem;
   border-radius: 10px;
   border: 1.5px solid #c0392b;
   margin-bottom: 30px;
-  outline: none;
   background-color: #f9fbfe;
   color: #34495e;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: 0.3s;
 
   &:focus {
     border-color: #e74c3c;
     box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+    outline: none;
   }
 `;
 
 export const FilterSection = styled.div `
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 30px;
-  flex-wrap: wrap;
 `;
 
 export const FilterSelect = styled.select `
   flex: 1 1 200px;
-  min-width: 150px;
-  padding: 12px 15px;
+  padding: 12px;
   border-radius: 10px;
   border: 1.5px solid #c0392b;
   font-size: 1rem;
-  cursor: pointer;
   background-color: #eaf3ff;
   color: #34495e;
-  transition: border-color 0.3s ease;
+  cursor: pointer;
+  transition: 0.3s;
 
-  &:hover,
-  &:focus {
+  &:hover, &:focus {
     border-color: #e74c3c;
     outline: none;
   }
 `;
 
-// Обгортка для DatePicker для правильного флексу і ширини
 export const DatePickerWrapper = styled.div `
   flex: 1 1 200px;
-  min-width: 150px;
 
   .date-picker-input {
-    width: 100% !important;
-    padding: 12px 15px;
+    width: 100%;
+    padding: 12px;
     border-radius: 10px;
     border: 1.5px solid #c0392b;
     font-size: 1rem;
-    cursor: pointer;
     background-color: #eaf3ff;
     color: #34495e;
-    outline: none;
-    transition: border-color 0.3s ease;
+    cursor: pointer;
 
     &:focus {
       border-color: #e74c3c;
       box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+      outline: none;
     }
   }
 
   .react-datepicker-popper {
-    z-index: 1000; /* Щоб календар був поверх */
+    z-index: 1000;
   }
 `;
 
 export const ShowGrid = styled.div `
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 280px));
-
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
 `;
 
+export const Logo = styled.img `
+  width: 120px;
+  display: block;
+  margin: 0 auto 20px;
+`;
+
+export const ThemeToggle = styled.button `
+  background: transparent;
+  border: 2px solid #c0392b;
+  color: #c0392b;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #c0392b;
+    color: #fff;
+  }
+`;
+
 export const ShowCard = styled.div `
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 8px 16px rgba(192, 57, 43, 0.1);
   padding: 20px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: default;
   animation: ${fadeInUp} 0.8s ease forwards;
-  perspective: 1000px;
+  transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
     transform: scale(1.07) translateY(-6px);
@@ -162,8 +169,7 @@ export const ShowImage = styled.img `
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 15px;
-  filter: drop-shadow(0 2px 4px rgba(195, 57, 43, 0.15));
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s, filter 0.3s;
 
   &:hover {
     transform: scale(1.12) rotate(1deg);
@@ -180,20 +186,14 @@ export const ShowTitle = styled.h2 `
 export const ShowDescription = styled.p `
   font-size: 1rem;
   color: #5d6d7e;
-  margin-bottom: 15px;
   min-height: 60px;
+  margin-bottom: 15px;
 `;
 
 export const ShowInfo = styled.p `
   font-size: 0.95rem;
   color: #7b8a97;
   margin-bottom: 15px;
-`;
-export const Card = styled.div `
-  width: 100px;
-  max-width: 100px;
-  flex-shrink: 0;
- 
 `;
 
 export const BookButton = styled.button `
@@ -205,9 +205,35 @@ export const BookButton = styled.button `
   border-radius: 30px;
   cursor: pointer;
   animation: ${pulse} 4s ease-in-out infinite;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e74c3c;
+  }
+`;
+
+export const PaginationContainer = styled.div `
+  margin-top: 20px;
+  display: flex;
+  justify-content: center; /* Центрування пагінації по горизонталі */
+  gap: 10px; /* Відстань між кнопками */
+`;
+
+export const PaginationButton = styled.button `
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: ${({ active }) => (active ? '#4CAF50' : '#eee')};
+  color: ${({ active }) => (active ? 'white' : '#333')};
+  cursor: ${({ active }) => (active ? 'default' : 'pointer')};
+  font-weight: ${({ active }) => (active ? 'bold' : 'normal')};
+  box-shadow: ${({ active }) => (active ? '0 0 5px #4CAF50' : 'none')};
   transition: background-color 0.3s ease;
 
-&:hover {
-background-color: #e74c3c;
-}
+  &:hover {
+    background-color: ${({ active }) => (active ? '#4CAF50' : '#ccc')};
+  }
 `;
+
+
+// За потреби додамо також контейнер для кнопок Next/Prev окремо, але це не обов'язково.
