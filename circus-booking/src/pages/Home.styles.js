@@ -1,6 +1,3 @@
-// Improved Home.styles.js and Home.jsx
-
-// =================== Home.styles.js ===================
 import styled, { keyframes } from 'styled-components';
 
 const glow = keyframes `

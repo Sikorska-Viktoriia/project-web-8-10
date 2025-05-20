@@ -14,17 +14,11 @@ import {
   SearchBar,
   FilterSection,
   FilterSelect,
-  DatePickerWrapper,
-  ShowGrid,
-  ShowCard,
-  ShowImage,
-  ShowTitle,
-  ShowDescription,
-  ShowInfo,
-  BookButton,
-  PaginationContainer,
-  PaginationButton
+  DatePickerWrapper
 } from './Home.styles';
+
+import ShowList from '../components/ShowList';
+
 
 const Home = () => {
   const [search, setSearch] = useState('');
@@ -34,13 +28,12 @@ const Home = () => {
   const [sortBy, setSortBy] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 8; // Динамічна кількість шоу на сторінці
+  const itemsPerPage = 8;
   const navigate = useNavigate();
 
   const uniqueTypes = useMemo(() => [...new Set(shows.map(show => show.type))], []);
   const uniqueLocations = useMemo(() => [...new Set(shows.map(show => show.city))], []);
 
-  // Фільтрація шоу
   const filteredShows = useMemo(() => {
     return shows.filter(show => {
       const matchesSearch = show.title.toLowerCase().includes(search.toLowerCase());
@@ -51,7 +44,6 @@ const Home = () => {
     });
   }, [search, filterType, filterDate, filterLocation]);
 
-  // Сортування шоу
   const sortedShows = useMemo(() => {
     return [...filteredShows].sort((a, b) => {
       switch (sortBy) {
@@ -67,15 +59,12 @@ const Home = () => {
     });
   }, [filteredShows, sortBy]);
 
-  // Підрахунок кількості сторінок
   const totalPages = Math.ceil(sortedShows.length / itemsPerPage);
 
-  // Скидаємо сторінку на 1 при зміні фільтрів або сортування
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filterType, filterDate, filterLocation, sortBy]);
 
-  // Показуємо шоу на поточній сторінці
   const paginatedShows = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return sortedShows.slice(start, start + itemsPerPage);
@@ -151,34 +140,13 @@ const Home = () => {
       {sortedShows.length === 0 ? (
         <p>Подій за вказаними фільтрами не знайдено.</p>
       ) : (
-        <>
-          <ShowGrid>
-            {paginatedShows.map(show => (
-              <ShowCard key={show.id}>
-                <ShowImage src={show.image} alt={show.title} />
-                <ShowTitle>{show.title}</ShowTitle>
-                <ShowDescription>{show.description}</ShowDescription>
-                <ShowInfo><strong>Дата:</strong> {show.date}</ShowInfo>
-                <ShowInfo><strong>Час:</strong> {show.time}</ShowInfo>
-                {show.price !== undefined && <ShowInfo><strong>Ціна:</strong> {show.price} грн</ShowInfo>}
-                <BookButton onClick={() => handleBookShow(show)}>Забронювати</BookButton>
-              </ShowCard>
-            ))}
-          </ShowGrid>
-
-          <PaginationContainer>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <PaginationButton
-                key={index}
-                onClick={() => setCurrentPage(index + 1)}
-                disabled={currentPage === index + 1}
-                active={currentPage === index + 1}
-              >
-                {index + 1}
-              </PaginationButton>
-            ))}
-          </PaginationContainer>
-        </>
+        <ShowList
+          shows={paginatedShows}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          onBook={handleBookShow}
+        />
       )}
     </PageContainer>
   );

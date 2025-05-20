@@ -15,8 +15,8 @@ const BookingForm = ({ selectedSeats, setSelectedSeats, showId }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [bookedSeats, setBookedSeats] = useState([]);
 
-  const VIP_PRICE = 300;
-  const REGULAR_PRICE = 150;
+  const VIP_PRICE = 200;
+  const REGULAR_PRICE = 100;
 
   const getSeatPrice = (seatId) => (seatId <= 20 ? VIP_PRICE : REGULAR_PRICE);
 
