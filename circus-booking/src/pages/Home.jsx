@@ -14,7 +14,8 @@ import {
   SearchBar,
   FilterSection,
   FilterSelect,
-  DatePickerWrapper
+  DatePickerWrapper,
+  ClearButton
 } from './Home.styles';
 
 import ShowList from '../components/ShowList';
@@ -88,7 +89,7 @@ const Home = () => {
       <Title>Цирк "На дроті!"</Title>
 
       <HistorySection>
-        <p>Цирк "Захоплення" є одним з найстаріших цирків у світі, що має багатовікову історію та безліч захоплюючих подій!</p>
+        <p>Цирк "На дроті!" є одним з найстаріших цирків у світі, що має багатовікову історію та безліч захоплюючих подій!</p>
       </HistorySection>
 
       <SearchBar
@@ -132,7 +133,9 @@ const Home = () => {
           <option value="price">Ціною</option>
         </FilterSelect>
 
-        <button onClick={clearFilters}>Очистити фільтри</button>
+        <ClearButton onClick={clearFilters}>
+  Очистити фільтри
+</ClearButton>
       </FilterSection>
 
       <p>Знайдено подій: {sortedShows.length}</p>

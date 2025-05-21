@@ -43,9 +43,14 @@ export const FormContainer = styled.form `
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 600px) {
+    padding: 25px 20px;
+    margin: 20px;
+    max-width: 100%;
+  }
 `;
 
-// Заголовок
 export const Title = styled.h3 `
   margin-bottom: 25px;
   font-size: 2.4rem;
@@ -54,6 +59,10 @@ export const Title = styled.h3 `
   animation: ${glow} 3s ease-in-out infinite;
   text-align: center;
   letter-spacing: 1px;
+
+  @media (max-width: 600px) {
+    font-size: 1.8rem;
+  }
 `;
 
 // Інпут
@@ -72,6 +81,11 @@ export const Input = styled.input `
     border-color: #c0392b;
     box-shadow: 0 0 12px rgba(231, 76, 60, 0.3);
     outline: none;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+    padding: 12px 14px;
   }
 `;
 
@@ -101,30 +115,14 @@ export const Button = styled.button `
     cursor: not-allowed;
     animation: none;
   }
-`;
 
-// Чекбокс
-export const CheckboxContainer = styled.div `
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin-top: 16px;
-  font-size: 0.95rem;
-  color: #2c3e50;
-
-  input {
-    margin-right: 10px;
-    transform: scale(1.3);
-    cursor: pointer;
-  }
-
-  label {
-    cursor: pointer;
-    user-select: none;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+    padding: 12px 18px;
   }
 `;
 
-// Додатковий текст
+
 export const InfoText = styled.p `
   margin-top: 18px;
   font-size: 0.95rem;
@@ -132,4 +130,8 @@ export const InfoText = styled.p `
   color: #7f8c8d;
   text-align: center;
   user-select: none;
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem;
+  }
 `;

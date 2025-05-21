@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import shows from "../data/shows";
 import CircusHall from "../components/CircusHall";
 import BookingForm from "../components/BookingForm";
+import Modal from "react-modal";
 
-// Анімації
+
+
 const fadeInUp = keyframes`
   from {
     opacity: 0;
@@ -35,7 +37,7 @@ const pulse = keyframes`
   }
 `;
 
-// СТИЛІ
+
 
 const BookingContainer = styled.div`
   max-width: 1100px;
@@ -148,10 +150,15 @@ export const BookButton = styled.button`
   }
 `;
 
+
+Modal.setAppElement("#root");
+
 export default function Booking() {
   const { showId } = useParams();
   const show = shows.find((s) => s.id.toString() === showId);
+
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   if (!show) {
     return (
@@ -161,23 +168,21 @@ export default function Booking() {
     );
   }
 
+  // Відкрити модалку
+  const openModal = () => setModalIsOpen(true);
+
+  // Закрити модалку
+  const closeModal = () => setModalIsOpen(false);
+
   return (
     <BookingContainer>
       <Title>Бронювання: {show.title}</Title>
 
       <ShowInfo>
-        <p>
-          <Bold>Опис:</Bold> {show.description}
-        </p>
-        <p>
-          <Bold>Дата:</Bold> {show.date}
-        </p>
-        <p>
-          <Bold>Час:</Bold> {show.time}
-        </p>
-        <p>
-          <Bold>Місце:</Bold> {show.location}
-        </p>
+        <p><Bold>Опис:</Bold> {show.detailedDescription}</p>
+        <p><Bold>Дата:</Bold> {show.date}</p>
+        <p><Bold>Час:</Bold> {show.time}</p>
+        <p><Bold>Місце:</Bold> {show.city}</p>
       </ShowInfo>
 
       <SectionTitle>Вибір місць</SectionTitle>
@@ -187,12 +192,44 @@ export default function Booking() {
         setSelectedSeats={setSelectedSeats}
       />
 
-      <SectionTitle>Дані для бронювання</SectionTitle>
-      <BookingForm
-        selectedSeats={selectedSeats}
-        setSelectedSeats={setSelectedSeats}
-        showId={show.id}
-      />
+      <div style={{ textAlign: "center", marginTop: 30 }}>
+        <BookButton
+          onClick={openModal}
+          disabled={selectedSeats.length === 0}
+        >
+          Забронювати
+        </BookButton>
+      </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Форма бронювання"
+        style={{
+          content: {
+            maxWidth: 600,
+            margin: "auto",
+            borderRadius: 20,
+            padding: 30,
+          },
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.6)",
+          },
+        }}
+      >
+        <BookingForm
+          selectedSeats={selectedSeats}
+          setSelectedSeats={setSelectedSeats}
+          showId={show.id}
+        />
+        <button
+          onClick={closeModal}
+          style={{ marginTop: 15 }}
+          aria-label="Закрити форму бронювання"
+        >
+          Закрити
+        </button>
+      </Modal>
     </BookingContainer>
   );
 }
