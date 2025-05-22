@@ -6,8 +6,6 @@ import CircusHall from "../components/CircusHall";
 import BookingForm from "../components/BookingForm";
 import Modal from "react-modal";
 
-
-
 const fadeInUp = keyframes`
   from {
     opacity: 0;
@@ -36,8 +34,6 @@ const pulse = keyframes`
     box-shadow: 0 0 28px rgba(192, 57, 43, 0.9);
   }
 `;
-
-
 
 const BookingContainer = styled.div`
   max-width: 1100px;
@@ -123,7 +119,8 @@ export const BookButton = styled.button`
   cursor: pointer;
   animation: ${pulse} 3s infinite ease-in-out;
   box-shadow: 0 6px 15px rgba(192, 57, 43, 0.7);
-  transition: background-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
+  transition: background-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.2s ease;
 
   &:hover {
     background-color: #e74c3c;
@@ -150,6 +147,30 @@ export const BookButton = styled.button`
   }
 `;
 
+const SuccessMessage = styled.div`
+  margin-top: 20px;
+  text-align: center;
+  color: #27ae60;
+  font-weight: 700;
+  font-size: 1.25rem;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  color: #c0392b;
+  cursor: pointer;
+  font-weight: 700;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #e74c3c;
+  }
+`;
 
 Modal.setAppElement("#root");
 
@@ -159,6 +180,8 @@ export default function Booking() {
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [bookingInProgress, setBookingInProgress] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   if (!show) {
     return (
@@ -168,21 +191,49 @@ export default function Booking() {
     );
   }
 
-  // Відкрити модалку
-  const openModal = () => setModalIsOpen(true);
+  const openModal = () => {
+    setModalIsOpen(true);
+    setSuccessMessage("");
+  };
 
-  // Закрити модалку
-  const closeModal = () => setModalIsOpen(false);
+  const closeModal = () => {
+    if (!bookingInProgress) {
+      setModalIsOpen(false);
+      setSuccessMessage("");
+    }
+  };
+
+
+  const handleBookingSuccess = () => {
+    setBookingInProgress(false);
+    setSuccessMessage("Бронювання пройшло успішно!");
+    setSelectedSeats([]);
+    // Закриваємо модалку через 2 секунди після успіху
+    setTimeout(() => setModalIsOpen(false), 2000);
+  };
+
+  
+  const handleBookingStatus = (inProgress) => {
+    setBookingInProgress(inProgress);
+  };
 
   return (
     <BookingContainer>
       <Title>Бронювання: {show.title}</Title>
 
       <ShowInfo>
-        <p><Bold>Опис:</Bold> {show.detailedDescription}</p>
-        <p><Bold>Дата:</Bold> {show.date}</p>
-        <p><Bold>Час:</Bold> {show.time}</p>
-        <p><Bold>Місце:</Bold> {show.city}</p>
+        <p>
+          <Bold>Опис:</Bold> {show.detailedDescription}
+        </p>
+        <p>
+          <Bold>Дата:</Bold> {show.date}
+        </p>
+        <p>
+          <Bold>Час:</Bold> {show.time}
+        </p>
+        <p>
+          <Bold>Місце:</Bold> {show.city}
+        </p>
       </ShowInfo>
 
       <SectionTitle>Вибір місць</SectionTitle>
@@ -193,10 +244,7 @@ export default function Booking() {
       />
 
       <div style={{ textAlign: "center", marginTop: 30 }}>
-        <BookButton
-          onClick={openModal}
-          disabled={selectedSeats.length === 0}
-        >
+        <BookButton onClick={openModal} disabled={selectedSeats.length === 0}>
           Забронювати
         </BookButton>
       </div>
@@ -210,25 +258,31 @@ export default function Booking() {
             maxWidth: 600,
             margin: "auto",
             borderRadius: 20,
-            padding: 30,
+            padding: 40,
+            position: "relative",
           },
           overlay: {
             backgroundColor: "rgba(0,0,0,0.6)",
           },
         }}
       >
+        <CloseButton onClick={closeModal} aria-label="Закрити форму бронювання">
+          &times;
+        </CloseButton>
+
         <BookingForm
           selectedSeats={selectedSeats}
           setSelectedSeats={setSelectedSeats}
           showId={show.id}
+          onBookingSuccess={handleBookingSuccess}
+          onBookingStatusChange={handleBookingStatus}
         />
-        <button
-          onClick={closeModal}
-          style={{ marginTop: 15 }}
-          aria-label="Закрити форму бронювання"
-        >
-          Закрити
-        </button>
+
+        {bookingInProgress && (
+          <p style={{ textAlign: "center", marginTop: 15 }}>Обробка бронювання...</p>
+        )}
+
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
       </Modal>
     </BookingContainer>
   );

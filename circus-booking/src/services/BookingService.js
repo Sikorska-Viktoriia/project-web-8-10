@@ -18,11 +18,7 @@ const BookingService = {
         return response.json();
     },
 
-    async searchBookingsByEmail(email) {
-        const response = await fetch(`/api/bookings/search?email=${encodeURIComponent(email)}`);
-        if (!response.ok) throw new Error('Failed to search bookings');
-        return response.json();
-    }
+
 };
 
 export default BookingService;

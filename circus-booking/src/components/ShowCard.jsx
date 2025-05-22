@@ -1,4 +1,4 @@
-// ShowCard.jsx
+
 import React from 'react';
 import {
   ShowCard as StyledShowCard,
